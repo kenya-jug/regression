@@ -1,4 +1,3 @@
-
 # API Design Document
 ###  Regression
 
@@ -347,3 +346,44 @@ curl -X GET "https://api-domain.com/logs?severity=ERROR&startTime=2025-05-01T00:
 * Support for bulk log ingestion (`POST /logs/bulk`)
 * WebSocket-based live log streaming
 * Rate limiting and API usage tracking
+
+---
+
+## Appendix: How AI Log Grouping and Anomaly Detection Works
+
+### Overview
+The Regression backend leverages AI/ML techniques to automatically analyze incoming logs for grouping similar errors and detecting anomalies. This enables proactive identification of issues, root cause analysis, and trend detection.
+
+### Log Grouping (Clustering)
+- **Technique:** The system uses unsupervised machine learning algorithms (such as k-means, DBSCAN, or embedding-based clustering) to group logs with similar messages, stack traces, or metadata.
+- **Features Used:**
+  - Log message text (vectorized using NLP techniques)
+  - Exception types and stack traces
+  - Application and source metadata
+- **Purpose:**
+  - Identify recurring error patterns
+  - Reduce noise by grouping duplicate or similar logs
+  - Surface representative errors for faster triage
+
+### Anomaly Detection
+- **Technique:** The system applies statistical and machine learning models (e.g., Isolation Forest, autoencoders, or time-series analysis) to detect outliers in log data.
+- **Features Used:**
+  - Frequency and rate of log events
+  - Severity and error type distribution
+  - Unusual patterns in log content or metadata
+- **Purpose:**
+  - Alert on rare or unexpected errors
+  - Detect spikes or drops in error rates
+  - Highlight logs with high anomaly scores for investigation
+
+### Example Workflow
+1. **Ingestion:** Logs are ingested and preprocessed (tokenization, normalization).
+2. **Feature Extraction:** Relevant features are extracted from each log entry.
+3. **Clustering:** Logs are grouped into clusters based on similarity.
+4. **Anomaly Scoring:** Each log is assigned an anomaly score; high scores indicate potential issues.
+5. **API Exposure:** Results are available via `/logs/analysis/anomalies` and `/logs/analysis/clusters` endpoints.
+
+### Benefits
+- Reduces manual effort in log analysis
+- Surfaces actionable insights for developers and operators
+- Enables early detection of regressions and critical incidents
