@@ -22,13 +22,23 @@ package com.kenyajug.regression.entities;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 public record AppLog(
         String uuid,
+        @NotNull(message = "timestamp cannot be null")
         LocalDateTime timestamp,
+        @NotNull(message = "severity cannot be null")
+        @NotBlank(message = "severity cannot be blank")
         String severity,
+        @NotNull(message = "applicationId cannot be null")
+        @NotBlank(message = "applicationId cannot be blank")
         String applicationId,
         String logSource,
+        @NotBlank(message = "message cannot be null")
+        @NotNull(message = "message cannot be blank")
         String message
 ) {
 }

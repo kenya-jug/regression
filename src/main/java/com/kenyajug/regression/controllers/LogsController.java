@@ -23,24 +23,28 @@ package com.kenyajug.regression.controllers;
  * SOFTWARE.
  */
 
+import com.kenyajug.regression.entities.AppLog;
 import com.kenyajug.regression.resources.LogsFilterResource;
 import com.kenyajug.regression.services.HourlyLogStats;
+import com.kenyajug.regression.services.IngestionService;
 import com.kenyajug.regression.services.LogChartData;
 import com.kenyajug.regression.services.RetrievalService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 @Controller
 public class LogsController {
     private final RetrievalService retrievalService;
-    public LogsController(RetrievalService retrievalService) {
+    private final IngestionService ingestionService;
+    public LogsController(RetrievalService retrievalService, IngestionService ingestionService) {
         this.retrievalService = retrievalService;
+        this.ingestionService = ingestionService;
     }
     @GetMapping("/logs")
     public String listLogs(Model model){
@@ -135,4 +139,19 @@ public class LogsController {
         model.addAttribute("metadata",metadata);
         return "logs-detailed";
     }
+
+
+    @PostMapping("/logs/ingest")
+    @PreAuthorize("hasAnyRole('admin','datasource')")
+    public String createLogs(@Valid @RequestBody AppLog appLog){
+        var optionalLog = retrievalService.findLogsById(appLog.uuid());
+        if (optionalLog.isPresent()) {
+            throw new RuntimeException("Log with id " + appLog.uuid() + " already exists");
+        } else {
+            //ingestionService.saveNewLogs(appLog);
+            return "logs-created";
+        }
+    }
+
+
 }
