@@ -120,5 +120,7 @@ public interface IIngestionService {
      * @return an {@link Optional} containing the extracted {@link LogsMetadata} if a match is found; otherwise, an empty {@link Optional}
      */
     Optional<LogsMetadata> extractMetadataByRegex(AppLog appLog, InstantTraceGroup traceGroup, Constants.Tuple regex);
+
+    void saveAppLog(AppLog appLog) ;
 }
 
