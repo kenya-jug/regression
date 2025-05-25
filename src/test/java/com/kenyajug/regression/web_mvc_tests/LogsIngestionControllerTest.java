@@ -1,21 +1,13 @@
 package com.kenyajug.regression.web_mvc_tests;
 
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.kenyajug.regression.controllers.LogsIngestionController;
+
 import com.kenyajug.regression.entities.AppLog;
 import com.kenyajug.regression.services.IIngestionService;
-import com.kenyajug.regression.services.IRetrievalService;
 import com.kenyajug.regression.utils.DateTimeUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
