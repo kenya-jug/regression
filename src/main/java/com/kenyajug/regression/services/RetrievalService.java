@@ -225,4 +225,12 @@ public class RetrievalService implements IRetrievalService{
     public List<LogsMetadata> findMetadataByLogId(String logId) {
         return metadataRepository.findByRootLogId(logId);
     }
+
+    @Override
+    public Optional<AppLog> findAppLogById(String logId) {
+        var appLog = logRepository.findById(logId);
+        if (appLog.isEmpty()) return Optional.empty();
+        return appLog;
+    }
+
 }

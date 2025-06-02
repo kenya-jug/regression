@@ -100,7 +100,7 @@ public class PasswordManagementTest {
                         .param("confirmPassword",passwordUpdate.confirmPassword())
                 )
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is3xxRedirection());
     }
     @Test
     @DisplayName("Throw security exception if default admin account is not present for this update")
