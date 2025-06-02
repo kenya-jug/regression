@@ -24,10 +24,10 @@ public class LogsIngestionController {
 
 
     @PostMapping("/logs/ingest")
-    @PreAuthorize("hasAnyRole('admin','datasource')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','datasource')")
     public ResponseEntity<?> ingestLogs(@Valid @RequestBody AppLog appLog) {
-        var optionalLog = retrievalService.findLogsById(appLog.uuid());
-        if (optionalLog.isPresent()) {
+        var optionalAppLog = retrievalService.findAppLogById(appLog.uuid());
+        if (optionalAppLog.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Log with id " + appLog.uuid() + " already exists");
         } else {

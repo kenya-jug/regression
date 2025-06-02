@@ -1,32 +1,50 @@
 package com.kenyajug.regression.web_mvc_tests;
 
 
+import com.kenyajug.regression.controllers.LogsIngestionController;
 import com.kenyajug.regression.entities.AppLog;
-import com.kenyajug.regression.services.IIngestionService;
+import com.kenyajug.regression.resources.ApplicationResource;
+import com.kenyajug.regression.resources.DatasourceResource;
+import com.kenyajug.regression.resources.LogResource;
+import com.kenyajug.regression.services.IngestionService;
+import com.kenyajug.regression.services.RetrievalService;
 import com.kenyajug.regression.utils.DateTimeUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//@WebMvcTest(LogsIngestionController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class LogsIngestionControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
+    @MockitoBean
+    RetrievalService retrievalService;
 
-    @Mock
-    IIngestionService ingestionService;
+    @MockitoBean
+    IngestionService ingestionService;
 
+    @MockitoBean
     private AppLog appLog;
 
-    //@BeforeEach
+    @BeforeEach
     void setUp() {
         appLog = new AppLog(
                 "test-uuid",
@@ -39,27 +57,36 @@ class LogsIngestionControllerTest {
         );
     }
 
-    //@Test
+    @Test
     void shouldReturnConflictIfLogExists() throws Exception {
-
+        var datetime = DateTimeUtils.convertZonedUTCTimeStringToLocalDateTime("2025-08-11 11:09:22 UTC");
+        AppLog applog = new AppLog(
+                "test-uuid",
+                datetime,
+                "ERROR",
+                "app-123",
+                "",
+                "Test message"
+        );
+        when(retrievalService.findAppLogById("test-uuid")).thenReturn(Optional.of(applog));
         mockMvc.perform(post("/logs/ingest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                    {
-                        "uuid": "test-uuid",
-                        "timestamp": "2025-05-08T12:00:00",
-                        "severity": "ERROR",
-                        "applicationId": "app-123",
-                        "message": "Test message"
-                    }
-                """))
+                        {
+                            "uuid": "test-uuid",
+                            "timestamp": "%s",
+                            "severity": "ERROR",
+                            "applicationId": "app-123",
+                            "message": "Test message"
+                        }
+                        """.formatted(datetime)))
                 .andExpect(status().isConflict())
                 .andExpect(content().string("Log with id test-uuid already exists"));
 
         verify(ingestionService, never()).saveAppLog(any());
     }
 
-    //@Test
+    @Test
     void shouldCreateLogIfNotExists() throws Exception {
 
         mockMvc.perform(post("/logs/ingest")
