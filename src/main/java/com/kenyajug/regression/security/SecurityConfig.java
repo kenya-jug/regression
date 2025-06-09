@@ -30,6 +30,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractAu
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -39,8 +40,11 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.anyRequest().authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+        httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+                .formLogin(form -> form.permitAll())
+                .httpBasic(basic -> {})
                 .userDetailsService(securityService);
         return httpSecurity.build();
     }
@@ -48,4 +52,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
 }

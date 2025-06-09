@@ -22,6 +22,7 @@ package com.kenyajug.regression.services;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import com.kenyajug.regression.entities.AppLog;
 import com.kenyajug.regression.entities.LogsMetadata;
 import com.kenyajug.regression.resources.ApplicationResource;
 import com.kenyajug.regression.resources.DatasourceResource;
@@ -90,4 +91,7 @@ public interface IRetrievalService {
      * @return an {@code List} containing the {@code LogsMetadata} list if found, or empty if no log matches the given ID
      */
     List<LogsMetadata> findMetadataByLogId(String logId);
+
+
+    Optional<AppLog> findAppLogById(String logId);
 }

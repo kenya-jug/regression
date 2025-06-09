@@ -72,7 +72,7 @@ public class DashboardPageTests {
     public void shouldLoadHomePage_UnauthorizedTest() throws Exception{
         mockMvc.perform(get("/"))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
     }
     @Test
     @DisplayName("Should load home page successfully")
