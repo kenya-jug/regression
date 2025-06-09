@@ -42,12 +42,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers("/logs/ingest").permitAll()
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
                 .formLogin(form -> form.permitAll())
-                .httpBasic(basic -> {}) // <-- Add this line
+                .httpBasic(basic -> {})
                 .userDetailsService(securityService);
         return httpSecurity.build();
     }
