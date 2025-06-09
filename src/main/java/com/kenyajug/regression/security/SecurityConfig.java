@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form.permitAll())
+                .httpBasic(basic -> {}) // <-- Add this line
                 .userDetailsService(securityService);
         return httpSecurity.build();
     }

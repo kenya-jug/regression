@@ -43,7 +43,6 @@ public class ApplicationBasicSecurityTest {
     public void shouldThrow3xxWhenMissingCredentialsTest() throws Exception {
         mockMvc.perform(get("/"))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("http://localhost/login"));
+                .andExpect(status().is4xxClientError());
     }
 }

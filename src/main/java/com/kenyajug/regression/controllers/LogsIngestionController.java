@@ -23,7 +23,7 @@ public class LogsIngestionController {
     }
 
 
-    @PostMapping("/logs/ingest")
+    @PostMapping("/ingest")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','datasource')")
     public ResponseEntity<?> ingestLogs(@Valid @RequestBody AppLog appLog) {
         var optionalAppLog = retrievalService.findAppLogById(appLog.uuid());

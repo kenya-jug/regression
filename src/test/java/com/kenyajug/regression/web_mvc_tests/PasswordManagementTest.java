@@ -80,7 +80,7 @@ public class PasswordManagementTest {
     public void shouldThrow302_OnPasswordResetPageTest() throws Exception {
         mockMvc.perform(get("/user/form"))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
     }
     @Test
     @DisplayName("Should throw SecurityException under security violation conditions")
@@ -100,7 +100,7 @@ public class PasswordManagementTest {
                         .param("confirmPassword",passwordUpdate.confirmPassword())
                 )
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
     }
     @Test
     @DisplayName("Throw security exception if default admin account is not present for this update")

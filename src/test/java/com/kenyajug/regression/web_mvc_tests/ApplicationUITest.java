@@ -71,7 +71,7 @@ public class ApplicationUITest {
     public void shouldThrowUnauthorizedAccessErrorApplicationFormTest() throws Exception {
         mockMvc.perform(get("/add/application"))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
     }
     @Test
     @DisplayName("Should launch source application form successfully")

@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,7 +70,8 @@ class LogsIngestionControllerTest {
                 "Test message"
         );
         when(retrievalService.findAppLogById("test-uuid")).thenReturn(Optional.of(applog));
-        mockMvc.perform(post("/logs/ingest")
+        mockMvc.perform(post("/ingest")
+                        .with(httpBasic("admin@regression.com", "admin123")) // Assuming basic auth is used
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                         {
@@ -89,7 +91,8 @@ class LogsIngestionControllerTest {
     @Test
     void shouldCreateLogIfNotExists() throws Exception {
 
-        mockMvc.perform(post("/logs/ingest")
+        mockMvc.perform(post("/ingest")
+                        .with(httpBasic("admin@regression.com", "admin123"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                     {
@@ -103,5 +106,22 @@ class LogsIngestionControllerTest {
                 .andExpect(status().isCreated());
 
         verify(ingestionService, times(1)).saveAppLog(any());
+    }
+
+
+    @Test
+    void shouldReturnUnauthorizedIfNoCredentials() throws Exception {
+        mockMvc.perform(post("/ingest")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                    {
+                        "uuid": "test-uuid",
+                        "timestamp": "2025-05-08T12:00:00",
+                        "severity": "ERROR",
+                        "applicationId": "app-123",
+                        "message": "Test message"
+                    }
+                """))
+                .andExpect(status().isUnauthorized());
     }
 }
