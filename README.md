@@ -36,20 +36,12 @@ https://github.com/user-attachments/assets/50589dbc-0b7f-4536-a047-e82c18b078d5
    cd regression
    ```
 
-2. **Configure the database**
-   - SQLite database will be automatically created in the project directory
-   - Update `src/main/resources/application.properties` with your database configuration:
-     ```properties
-     spring.datasource.url=jdbc:sqlite:regression.db
-     spring.datasource.driver-class-name=org.sqlite.JDBC
-     ```
-
-3. **Build the project**
+2. **Build the project**
    ```bash
    mvn clean install
    ```
 
-4. **Run the application**
+3. **Run the application**
    ```bash
    mvn spring-boot:run
    ```
