@@ -54,14 +54,8 @@ https://github.com/user-attachments/assets/50589dbc-0b7f-4536-a047-e82c18b078d5
    mvn spring-boot:run
    ```
    - The server will start on `http://localhost:8080`
-   - Note : Accessing the root URL (/) may return a **404 Not Found** response. This is expected behavior
-   
 
-5. **Access the Application**
-   - Open the application in your browser using the following URL: `https://localhost:8080/regression/login`
-   
-
-6. **Login Credentials**
+5. **Login Credentials**
    - Use the default credentials to log in : 
        * Username: `admin@regression.com`
        * Password: `admin123`
