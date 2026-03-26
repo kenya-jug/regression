@@ -45,7 +45,13 @@ https://github.com/user-attachments/assets/50589dbc-0b7f-4536-a047-e82c18b078d5
    ```bash
    mvn spring-boot:run
    ```
-   The server will start on `http://localhost:8080`
+   - The server will start on `http://localhost:8080`
+
+5. **Login Credentials**
+   - Use the default credentials to log in : 
+       * Username: `admin@regression.com`
+       * Password: `admin123`
+   - These credentials are automatically initialized in the application via the `InitialUserSetup.java` file.
 
 ### Docker Deployment
 
