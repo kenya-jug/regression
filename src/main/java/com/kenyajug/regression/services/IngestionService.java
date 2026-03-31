@@ -282,4 +282,9 @@ public class IngestionService implements IIngestionService{
         );
         return Optional.of(metadata);
     }
+
+    @Override
+    public void saveAppLog(AppLog appLog) {
+        appLogRepository.save(appLog);
+    }
 }
